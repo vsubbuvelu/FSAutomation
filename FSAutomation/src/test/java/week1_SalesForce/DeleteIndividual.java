@@ -23,7 +23,7 @@ import com.sun.corba.se.spi.orbutil.fsm.Input;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class DeleteIndividual {
+public class EditIndividual {
 
 	@Test
 	public void test() throws InterruptedException {
@@ -66,24 +66,21 @@ public class DeleteIndividual {
 		driver.findElement(By.xpath("//div[contains(@class,'forceVirtualActionMarker')]//a")).click();
 		Thread.sleep(1000);
 		
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='Delete']")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='Edit']")));
 		Actions act = new Actions(driver);
-		act.moveToElement(driver.findElement(By.xpath("//div[text()='Delete']"))).click().perform();
-
-
+		act.moveToElement(driver.findElement(By.xpath("//div[@title='Edit']"))).click().perform();
 		
+		driver.findElement(By.xpath("//span[text()='Salutation']/parent::span/following-sibling::div")).click();
+		driver.findElement(By.xpath("//a[@title='Mr.']")).click();
 		String firstName = "Ganesh";
-		String expName = "Individual "+'"'+firstName+" "+searchIndividualName+'"'+" was deleted. Undo";
-		driver.findElement(By.xpath("//span[text()='Delete']")).click();
-		
-		//wait.until(ExpectedConditions.textToBePresentInElement(driver.findElement(By.xpath("//span[@class='toastMessage slds-text-heading--small forceActionsText']")), "toastMessage slds-text-heading--small forceActionsText"));
-		Thread.sleep(3000);
+		driver.findElement(By.xpath("//input[@placeholder='First Name']")).clear();
+		driver.findElement(By.xpath("//input[@placeholder='First Name']")).sendKeys(firstName);
+		String expName = "Individual "+'"'+firstName+" "+searchIndividualName+'"'+" was saved.";
+		driver.findElement(By.xpath("//button[@title='Save']")).click();
+		Thread.sleep(1000);
 		String actualSuccessMessage = driver.findElement(By.xpath("//span[@class='toastMessage slds-text-heading--small forceActionsText']")).getText();
 		assertEquals(actualSuccessMessage,expName);
-		driver.findElement(By.xpath("//input[@name='Individual-search-input']")).click();
-		driver.findElement(By.xpath("//input[@name='Individual-search-input']")).clear();
 		
-		driver.findElement(By.xpath("//input[@name='Individual-search-input']")).sendKeys(searchIndividualName,Keys.ENTER);
 		
 	}
 
